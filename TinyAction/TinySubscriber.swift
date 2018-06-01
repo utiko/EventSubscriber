@@ -6,6 +6,8 @@
 //
 //  My experiment based on NSNotification
 
+import Foundation
+
 struct TinySubscriberConstants {
     static let notificationPrefix = "TSNotification"
     static let dataKey: String = "ts_data"

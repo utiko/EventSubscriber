@@ -12,6 +12,8 @@
 		3D3CB27520C177690091D3DD /* TinyAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D3CB26720C177690091D3DD /* TinyAction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D3CB28020C177890091D3DD /* TinyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* TinyAction.swift */; };
 		3D3CB28120C177890091D3DD /* TinySubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* TinySubscriber.swift */; };
+		3D3CB28220C17B3B0091D3DD /* TinyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* TinyAction.swift */; };
+		3D3CB28320C17B3D0091D3DD /* TinySubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* TinySubscriber.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,7 +212,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D3CB28320C17B3D0091D3DD /* TinySubscriber.swift in Sources */,
 				3D3CB27320C177690091D3DD /* TinyActionTests.swift in Sources */,
+				3D3CB28220C17B3B0091D3DD /* TinyAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

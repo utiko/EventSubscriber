@@ -5,6 +5,8 @@
 //  Copyright © 2017 uTiko. All rights reserved.
 //
 
+import Foundation
+
 protocol TinyAction {
     func perform()
 }
