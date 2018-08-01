@@ -1,6 +1,6 @@
 //
-//  EventTests.swift
-//  EventTests
+//  EventSubscriberTests.swift
+//  EventSubscriberTests
 //
 //  Created by Kostiantyn Kolesnyk on 6/1/18.
 //  Copyright © 2018 Kostiantyn Kolesnyk. All rights reserved.
@@ -23,103 +23,103 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
     
     func testSubscribtion() {
         
-        struct ActionWithParameters: Event {
+        struct EventWithParameters: Event {
             var message: String
             var value: Int
         }
         
-        func performAction() {
-            ActionWithParameters(message: "Blah", value: 10).perform()
+        func performEvent() {
+            EventWithParameters(message: "Blah", value: 10).send()
         }
         
-        var actionTriggered = false
+        var eventTriggered = false
             
-        subscribe { (action: ActionWithParameters) in
-            actionTriggered = true
-            XCTAssertEqual(action.message, "Blah", "Wrong message")
-            XCTAssertEqual(action.value, 10, "Wrong value")
+        subscribe { (event: EventWithParameters) in
+            eventTriggered = true
+            XCTAssertEqual(event.message, "Blah", "Wrong message")
+            XCTAssertEqual(event.value, 10, "Wrong value")
         }
         
-        performAction()
+        performEvent()
         
-        XCTAssertEqual(actionTriggered, true, "Action was not triggered")
+        XCTAssertEqual(eventTriggered, true, "Event was not triggered")
     }
     
-    func testSingleActionUnsubscribe() {
-        var firstActionTriggered = false
-        var secondActionTriggered = false
+    func testSingleEventUnsubscribe() {
+        var firstEventTriggered = false
+        var secondEventTriggered = false
 
-        struct FirstAction: Event {}
-        struct SecondAction: Event {}
+        struct FirstEvent: Event {}
+        struct SecondEvent: Event {}
         
-        func performActions() {
-            FirstAction().perform()
-            SecondAction().perform()
+        func performEvents() {
+            FirstEvent().send()
+            SecondEvent().send()
         }
         
-        subscribe { (action: FirstAction) in
-            firstActionTriggered = true
+        subscribe { (event: FirstEvent) in
+            firstEventTriggered = true
         }
-        subscribe { (action: SecondAction) in
-            secondActionTriggered = true
+        subscribe { (event: SecondEvent) in
+            secondEventTriggered = true
         }
         
-        performActions()
+        performEvents()
         
-        XCTAssertEqual(firstActionTriggered, true, "First action wasn't triggered")
-        XCTAssertEqual(secondActionTriggered, true, "Second action wasn't triggered")
+        XCTAssertEqual(firstEventTriggered, true, "First event wasn't triggered")
+        XCTAssertEqual(secondEventTriggered, true, "Second event wasn't triggered")
         
-        firstActionTriggered = false
-        secondActionTriggered = false
+        firstEventTriggered = false
+        secondEventTriggered = false
         
-        unsubscribe(action: FirstAction.self)
+        unsubscribe(event: FirstEvent.self)
         
-        performActions()
+        performEvents()
         
-        XCTAssertEqual(firstActionTriggered, false, "First action wasn't unsubscribed")
-        XCTAssertEqual(secondActionTriggered, true, "Second action wasn't triggered")
+        XCTAssertEqual(firstEventTriggered, false, "First event wasn't unsubscribed")
+        XCTAssertEqual(secondEventTriggered, true, "Second event wasn't triggered")
     }
     
     func testUnsubscribeAll() {
-        var firstActionTriggered = false
-        var secondActionTriggered = false
+        var firstEventTriggered = false
+        var secondEventTriggered = false
         
-        struct FirstAction: Event {}
-        struct SecondAction: Event {}
+        struct FirstEvent: Event {}
+        struct SecondEvent: Event {}
         
-        func performActions() {
-            FirstAction().perform()
-            SecondAction().perform()
+        func performEvents() {
+            FirstEvent().send()
+            SecondEvent().send()
         }
         
-        subscribe { (action: FirstAction) in
-            firstActionTriggered = true
+        subscribe { (event: FirstEvent) in
+            firstEventTriggered = true
         }
-        subscribe { (action: SecondAction) in
-            secondActionTriggered = true
+        subscribe { (event: SecondEvent) in
+            secondEventTriggered = true
         }
         
-        performActions()
+        performEvents()
         
-        XCTAssertEqual(firstActionTriggered, true, "First action wasn't triggered")
-        XCTAssertEqual(secondActionTriggered, true, "Second action wasn't triggered")
+        XCTAssertEqual(firstEventTriggered, true, "First event wasn't triggered")
+        XCTAssertEqual(secondEventTriggered, true, "Second event wasn't triggered")
         
-        firstActionTriggered = false
-        secondActionTriggered = false
+        firstEventTriggered = false
+        secondEventTriggered = false
         
         unsubscribeAll()
         
-        performActions()
+        performEvents()
         
-        XCTAssertEqual(firstActionTriggered, false, "First action wasn't unsubscribed")
-        XCTAssertEqual(secondActionTriggered, false, "Second action wasn't unsubscribed")
+        XCTAssertEqual(firstEventTriggered, false, "First event wasn't unsubscribed")
+        XCTAssertEqual(secondEventTriggered, false, "Second event wasn't unsubscribed")
     }
     
-    func testEnumAction() {
+    func testEnumEvent() {
         
         class AuthorizationService {
             
-            enum AuthStateChangeAction: Event {
+            enum AuthStateChangeEvent: Event {
                 case signIn
                 case signOut
             }
@@ -127,15 +127,15 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
             func signIn() {
                 /* [Some sign in jobs] */
                 
-                // Call the action
-                AuthStateChangeAction.signIn.perform()
+                // Call the event
+                AuthStateChangeEvent.signIn.send()
             }
             
             func signOut() {
                 /* [Some sign out jobs] */
                 
-                // Call the action
-                AuthStateChangeAction.signOut.perform()
+                // Call the event
+                AuthStateChangeEvent.signOut.send()
             }
         }
         
@@ -144,8 +144,8 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
             public var authorized: Bool = false
 
             init() {
-                subscribe { [weak self] (action: AuthorizationService.AuthStateChangeAction) in
-                    switch action {
+                subscribe { [weak self] (event: AuthorizationService.AuthStateChangeEvent) in
+                    switch event {
                     case .signIn: self?.authorized = true
                     case .signOut: self?.authorized = false
                     }
@@ -168,7 +168,7 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
     }
     
     func testMemoryLeak() {
-        struct Action: Event {}
+        struct SomeEvent: Event {}
         
         class SomeSubscriber: EventSubscriber {
             deinit {
@@ -181,13 +181,13 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
 
         var blockRun = false
         
-        subscriber?.subscribe{ (_: Action) in
+        subscriber?.subscribe{ (_: SomeEvent) in
             blockRun = true
         }
 
         subscriber = nil
         
-        Action().perform()
+        SomeEvent().send()
 
         XCTAssertNil(subscriberCheck, "Memory leak occured")
         XCTAssertFalse(blockRun, "Subscription still exists")

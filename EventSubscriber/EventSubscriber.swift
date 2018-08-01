@@ -1,5 +1,5 @@
 //
-//  TinySubscriber.swift
+//  EventSubscriber.swift
 //
 //  Created by Kostia Kolesnyk on 10/29/17.
 //  Copyright © 2017 uTiko. All rights reserved.
@@ -9,8 +9,8 @@
 import Foundation
 
 struct EventSubscriberConstants {
-    static let notificationPrefix = "net.utiko.TSNotification."
-    static let dataKey: String = "ts_data"
+    static let notificationPrefix = "net.utiko.ESNotification."
+    static let dataKey: String = "net.utiko.es.data"
 }
 
 public typealias EventSubscription = NSObjectProtocol
@@ -18,7 +18,7 @@ public typealias EventSubscription = NSObjectProtocol
 public protocol EventSubscriber: class {
     var subscriptions: [String: EventSubscription]? { get set }
     func subscribe<T: Event>(using: @escaping (T, Any?) -> Void)
-    func unsubscribe<T: Event>(action: T.Type)
+    func unsubscribe<T: Event>(event: T.Type)
     func unsubscribeAll()
 }
 
@@ -37,13 +37,13 @@ public extension EventSubscriber {
         }
     }
     
-    public func subscribe<T: Event>(using: @escaping (_ action: T) -> Void) {
-        subscribe { (action: T, _) in
-            using(action)
+    public func subscribe<T: Event>(using: @escaping (_ event: T) -> Void) {
+        subscribe { (event: T, _) in
+            using(event)
         }
     }
     
-    public func subscribe<T: Event>(using: @escaping (_ action: T, _ object: Any?) -> Void) {
+    public func subscribe<T: Event>(using: @escaping (_ event: T, _ object: Any?) -> Void) {
         let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
         let notificationName = NSNotification.Name(key)
 
@@ -52,8 +52,8 @@ public extension EventSubscriber {
                                                                   object: nil,
                                                                   queue: nil) { (notification) in
             guard let userInfo = notification.userInfo,
-            let action = userInfo[EventSubscriberConstants.dataKey] as? T else { return }
-            using(action, notification.object)
+            let event = userInfo[EventSubscriberConstants.dataKey] as? T else { return }
+            using(event, notification.object)
         }
         if subscriptions == nil { subscriptions = [:] }
         subscriptions?[key] = subscription
@@ -66,7 +66,7 @@ public extension EventSubscriber {
         }
     }
     
-    public func unsubscribe<T: Event>(action: T.Type) {
+    public func unsubscribe<T: Event>(event: T.Type) {
         let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
         removeSubscription(forKey: key)
     }
