@@ -7,24 +7,24 @@
 
 import Foundation
 
-protocol TinyAction {
+public protocol Event {
     func perform()
 }
 
-extension TinyAction {
-    func perform() {
+public extension Event {
+    public func perform() {
         performAction(action: self)
     }
     
-    func perform(withObject object: Any) {
+    public func perform(withObject object: Any) {
         performAction(action: self, object: object)
     }
     
-    private func performAction<T: TinyAction>(action: T, object: Any? = nil) {
-        let key = TinySubscriberConstants.notificationPrefix + String(describing: type(of: action))
+    private func performAction<T: Event>(action: T, object: Any? = nil) {
+        let key = EventSubscriberConstants.notificationPrefix + String(describing: type(of: action))
         let notificationName = NSNotification.Name(key)
         
-        let userInfo = [TinySubscriberConstants.dataKey: action]
+        let userInfo = [EventSubscriberConstants.dataKey: action]
         NotificationCenter.default.post(name: notificationName, object: object, userInfo: userInfo)
     }
 }

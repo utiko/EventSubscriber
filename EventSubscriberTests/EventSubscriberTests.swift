@@ -1,15 +1,15 @@
 //
-//  TinyActionTests.swift
-//  TinyActionTests
+//  EventTests.swift
+//  EventTests
 //
 //  Created by Kostiantyn Kolesnyk on 6/1/18.
 //  Copyright © 2018 Kostiantyn Kolesnyk. All rights reserved.
 //
 
 import XCTest
-@testable import TinyAction
+@testable import EventSubscriber
 
-class TinyActionTests: XCTestCase, TinySubscriber {
+class EventSubscriberTests: XCTestCase, EventSubscriber {
     
     override func setUp() {
         super.setUp()
@@ -23,7 +23,7 @@ class TinyActionTests: XCTestCase, TinySubscriber {
     
     func testSubscribtion() {
         
-        struct ActionWithParameters: TinyAction {
+        struct ActionWithParameters: Event {
             var message: String
             var value: Int
         }
@@ -49,8 +49,8 @@ class TinyActionTests: XCTestCase, TinySubscriber {
         var firstActionTriggered = false
         var secondActionTriggered = false
 
-        struct FirstAction: TinyAction {}
-        struct SecondAction: TinyAction {}
+        struct FirstAction: Event {}
+        struct SecondAction: Event {}
         
         func performActions() {
             FirstAction().perform()
@@ -84,8 +84,8 @@ class TinyActionTests: XCTestCase, TinySubscriber {
         var firstActionTriggered = false
         var secondActionTriggered = false
         
-        struct FirstAction: TinyAction {}
-        struct SecondAction: TinyAction {}
+        struct FirstAction: Event {}
+        struct SecondAction: Event {}
         
         func performActions() {
             FirstAction().perform()
@@ -116,32 +116,82 @@ class TinyActionTests: XCTestCase, TinySubscriber {
     }
     
     func testEnumAction() {
-        enum AuthState: TinyAction {
-            case signIn
-            case signOut
+        
+        class AuthorizationService {
+            
+            enum AuthStateChangeAction: Event {
+                case signIn
+                case signOut
+            }
+            
+            func signIn() {
+                /* [Some sign in jobs] */
+                
+                // Call the action
+                AuthStateChangeAction.signIn.perform()
+            }
+            
+            func signOut() {
+                /* [Some sign out jobs] */
+                
+                // Call the action
+                AuthStateChangeAction.signOut.perform()
+            }
         }
         
-        func signIn() {
-            AuthState.signIn.perform()
-        }
-        func signOut() {
-            AuthState.signOut.perform()
-        }
+        class AuthorizationChangeHandler: EventSubscriber {
 
-        var actionTriggered = false
-        var localAuthState: AuthState = .signIn
+            public var authorized: Bool = false
+
+            init() {
+                subscribe { [weak self] (action: AuthorizationService.AuthStateChangeAction) in
+                    switch action {
+                    case .signIn: self?.authorized = true
+                    case .signOut: self?.authorized = false
+                    }
+                }
+            }
+            
+            deinit {
+                unsubscribeAll()
+            }
+        }
         
-        subscribe { (state: AuthState) in
-            actionTriggered = true
-            localAuthState = state
-        }
+        let authService = AuthorizationService()
+        let authHandler = AuthorizationChangeHandler()
+
+        authService.signIn()
+        XCTAssertEqual(authHandler.authorized, true, "Wrong state")
+
+        authService.signOut()
+        XCTAssertEqual(authHandler.authorized, false, "Wrong state")
+    }
+    
+    func testMemoryLeak() {
+        struct Action: Event {}
         
-        signIn()
-        XCTAssertEqual(localAuthState, AuthState.signIn, "Wrong state")
+        class SomeSubscriber: EventSubscriber {
+            deinit {
+                unsubscribeAll()
+            }
+        }
 
-        signOut()
-        XCTAssertEqual(localAuthState, AuthState.signOut, "Wrong state")
+        var subscriber: SomeSubscriber?  = SomeSubscriber()
+        weak var subscriberCheck = subscriber
 
-        XCTAssertEqual(actionTriggered, true, "Action was not triggered")
+        var blockRun = false
+        
+        subscriber?.subscribe{ (_: Action) in
+            blockRun = true
+        }
+
+        subscriber = nil
+        
+        Action().perform()
+
+        XCTAssertNil(subscriberCheck, "Memory leak occured")
+        XCTAssertFalse(blockRun, "Subscription still exists")
     }
 }
+
+
