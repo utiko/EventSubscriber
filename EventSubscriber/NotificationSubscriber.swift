@@ -8,43 +8,33 @@
 
 import Foundation
 
-struct EventSubscriberConstants {
-    static let notificationPrefix = "net.utiko.ESNotification."
-    static let dataKey: String = "net.utiko.es.data"
-}
+public typealias NotificationSubscription = NSObjectProtocol
 
-public typealias EventSubscription = NSObjectProtocol
-
-public protocol EventSubscriber: class {
-    var subscriptions: [String: EventSubscription]? { get set }
-    func subscribe<T: Event>(using: @escaping (T, Any?) -> Void)
-    func unsubscribe<T: Event>(event: T.Type)
+public protocol NotificationSubscriber: class {
+    func subscribe<T: NotificationEvent>(using: @escaping (T, Any?) -> Void)
+    func unsubscribe<T: NotificationEvent>(event: T.Type)
     func unsubscribeAll()
 }
 
-fileprivate struct TinySubscriptionAssociatedKeys {
-    static var subscriptions: UInt8 = 0
-}
-
-public extension EventSubscriber {
+public extension NotificationSubscriber {
     
-    var subscriptions: [String: EventSubscription]? {
+    var subscriptions: [String: NotificationSubscription]? {
         get {
-            return objc_getAssociatedObject(self, &TinySubscriptionAssociatedKeys.subscriptions) as? [String: EventSubscription]
+            return objc_getAssociatedObject(self, &NotificationSubscriptionAssociatedKeys.subscriptions) as? [String: NotificationSubscription]
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &TinySubscriptionAssociatedKeys.subscriptions, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &NotificationSubscriptionAssociatedKeys.subscriptions, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
     
-    func subscribe<T: Event>(using: @escaping (_ event: T) -> Void) {
+    func subscribe<T: NotificationEvent>(using: @escaping (_ event: T) -> Void) {
         subscribe { (event: T, _) in
             using(event)
         }
     }
     
-    func subscribe<T: Event>(using: @escaping (_ event: T, _ object: Any?) -> Void) {
-        let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
+    func subscribe<T: NotificationEvent>(using: @escaping (_ event: T, _ object: Any?) -> Void) {
+        let key = NotificationSubscriberConstants.notificationPrefix + String(describing: T.self)
         let notificationName = NSNotification.Name(key)
 
         removeSubscription(forKey: key)
@@ -52,15 +42,15 @@ public extension EventSubscriber {
                                                                   object: nil,
                                                                   queue: nil) { (notification) in
             guard let userInfo = notification.userInfo,
-            let event = userInfo[EventSubscriberConstants.dataKey] as? T else { return }
+            let event = userInfo[NotificationSubscriberConstants.dataKey] as? T else { return }
             using(event, notification.object)
         }
         if subscriptions == nil { subscriptions = [:] }
         subscriptions?[key] = subscription
     }
     
-    func unsubscribe<T: Event>(event: T.Type) {
-        let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
+    func unsubscribe<T: NotificationEvent>(event: T.Type) {
+        let key = NotificationSubscriberConstants.notificationPrefix + String(describing: T.self)
         removeSubscription(forKey: key)
     }
     
@@ -80,3 +70,13 @@ public extension EventSubscriber {
         }
     }
 }
+
+internal struct NotificationSubscriberConstants {
+    static let notificationPrefix = "net.utiko.ESNotification."
+    static let dataKey: String = "net.utiko.es.data"
+}
+
+private struct NotificationSubscriptionAssociatedKeys {
+    static var subscriptions: UInt8 = 0
+}
+

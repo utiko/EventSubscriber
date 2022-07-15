@@ -10,10 +10,10 @@
 		3D3CB26E20C177690091D3DD /* EventSubscriber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3CB26420C177690091D3DD /* EventSubscriber.framework */; };
 		3D3CB27320C177690091D3DD /* EventSubscriberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27220C177690091D3DD /* EventSubscriberTests.swift */; };
 		3D3CB27520C177690091D3DD /* EventSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D3CB26720C177690091D3DD /* EventSubscriber.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D3CB28020C177890091D3DD /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* Event.swift */; };
-		3D3CB28120C177890091D3DD /* EventSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* EventSubscriber.swift */; };
-		3D3CB28220C17B3B0091D3DD /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* Event.swift */; };
-		3D3CB28320C17B3D0091D3DD /* EventSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* EventSubscriber.swift */; };
+		3D3CB28020C177890091D3DD /* NotificationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* NotificationEvent.swift */; };
+		3D3CB28120C177890091D3DD /* NotificationSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* NotificationSubscriber.swift */; };
+		3D3CB28220C17B3B0091D3DD /* NotificationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27E20C177890091D3DD /* NotificationEvent.swift */; };
+		3D3CB28320C17B3D0091D3DD /* NotificationSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3CB27F20C177890091D3DD /* NotificationSubscriber.swift */; };
 		3D6959972111CA8500F34B35 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D6959942111CA8500F34B35 /* README.md */; };
 		3D6959982111CA8500F34B35 /* EventSubscriber.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3D6959952111CA8500F34B35 /* EventSubscriber.podspec */; };
 		3D6959992111CA8500F34B35 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 3D6959962111CA8500F34B35 /* LICENSE */; };
@@ -36,8 +36,8 @@
 		3D3CB26D20C177690091D3DD /* EventSubscriberTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventSubscriberTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3CB27220C177690091D3DD /* EventSubscriberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSubscriberTests.swift; sourceTree = "<group>"; };
 		3D3CB27420C177690091D3DD /* EventSubscriberTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EventSubscriberTests-Info.plist"; sourceTree = "<group>"; };
-		3D3CB27E20C177890091D3DD /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		3D3CB27F20C177890091D3DD /* EventSubscriber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSubscriber.swift; sourceTree = "<group>"; };
+		3D3CB27E20C177890091D3DD /* NotificationEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEvent.swift; sourceTree = "<group>"; };
+		3D3CB27F20C177890091D3DD /* NotificationSubscriber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationSubscriber.swift; sourceTree = "<group>"; };
 		3D6959942111CA8500F34B35 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3D6959952111CA8500F34B35 /* EventSubscriber.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EventSubscriber.podspec; sourceTree = "<group>"; };
 		3D6959962111CA8500F34B35 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -86,8 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				3D3CB26720C177690091D3DD /* EventSubscriber.h */,
-				3D3CB27E20C177890091D3DD /* Event.swift */,
-				3D3CB27F20C177890091D3DD /* EventSubscriber.swift */,
+				3D3CB27E20C177890091D3DD /* NotificationEvent.swift */,
+				3D3CB27F20C177890091D3DD /* NotificationSubscriber.swift */,
 			);
 			path = EventSubscriber;
 			sourceTree = "<group>";
@@ -129,9 +129,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D3CB27820C177690091D3DD /* Build configuration list for PBXNativeTarget "EventSubscriber" */;
 			buildPhases = (
+				3D3CB26120C177690091D3DD /* Headers */,
 				3D3CB25F20C177690091D3DD /* Sources */,
 				3D3CB26020C177690091D3DD /* Frameworks */,
-				3D3CB26120C177690091D3DD /* Headers */,
 				3D3CB26220C177690091D3DD /* Resources */,
 			);
 			buildRules = (
@@ -224,8 +224,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D3CB28020C177890091D3DD /* Event.swift in Sources */,
-				3D3CB28120C177890091D3DD /* EventSubscriber.swift in Sources */,
+				3D3CB28020C177890091D3DD /* NotificationEvent.swift in Sources */,
+				3D3CB28120C177890091D3DD /* NotificationSubscriber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,9 +233,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D3CB28320C17B3D0091D3DD /* EventSubscriber.swift in Sources */,
+				3D3CB28320C17B3D0091D3DD /* NotificationSubscriber.swift in Sources */,
 				3D3CB27320C177690091D3DD /* EventSubscriberTests.swift in Sources */,
-				3D3CB28220C17B3B0091D3DD /* Event.swift in Sources */,
+				3D3CB28220C17B3B0091D3DD /* NotificationEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

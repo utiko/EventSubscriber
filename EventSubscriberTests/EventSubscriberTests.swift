@@ -9,7 +9,7 @@
 import XCTest
 @testable import EventSubscriber
 
-class EventSubscriberTests: XCTestCase, EventSubscriber {
+class EventSubscriberTests: XCTestCase, NotificationSubscriber {
     
     override func setUp() {
         super.setUp()
@@ -23,7 +23,7 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
     
     func testSubscribtion() {
         
-        struct EventWithParameters: Event {
+        struct EventWithParameters: NotificationEvent {
             var message: String
             var value: Int
         }
@@ -49,8 +49,8 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
         var firstEventTriggered = false
         var secondEventTriggered = false
 
-        struct FirstEvent: Event {}
-        struct SecondEvent: Event {}
+        struct FirstEvent: NotificationEvent {}
+        struct SecondEvent: NotificationEvent {}
         
         func performEvents() {
             FirstEvent().send()
@@ -84,8 +84,8 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
         var firstEventTriggered = false
         var secondEventTriggered = false
         
-        struct FirstEvent: Event {}
-        struct SecondEvent: Event {}
+        struct FirstEvent: NotificationEvent {}
+        struct SecondEvent: NotificationEvent {}
         
         func performEvents() {
             FirstEvent().send()
@@ -119,7 +119,7 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
         
         class AuthorizationService {
             
-            enum AuthStateChangeEvent: Event {
+            enum AuthStateChangeEvent: NotificationEvent {
                 case signIn
                 case signOut
             }
@@ -139,7 +139,7 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
             }
         }
         
-        class AuthorizationChangeHandler: EventSubscriber {
+        class AuthorizationChangeHandler: NotificationSubscriber {
 
             public var authorized: Bool = false
 
@@ -168,9 +168,9 @@ class EventSubscriberTests: XCTestCase, EventSubscriber {
     }
     
     func testMemoryLeak() {
-        struct SomeEvent: Event {}
+        struct SomeEvent: NotificationEvent {}
         
-        class SomeSubscriber: EventSubscriber {
+        class SomeSubscriber: NotificationSubscriber {
             deinit {
                 unsubscribeAll()
             }

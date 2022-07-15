@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol Event {
+public protocol NotificationEvent {
     func send()
 }
 
-public extension Event {
+public extension NotificationEvent {
     func send() {
         sendEvent(event: self)
     }
@@ -21,12 +21,12 @@ public extension Event {
     }
 }
 
-private extension Event {
-    private func sendEvent<T: Event>(event: T, object: Any? = nil) {
-        let key = EventSubscriberConstants.notificationPrefix + String(describing: type(of: event))
+private extension NotificationEvent {
+    private func sendEvent<T: NotificationEvent>(event: T, object: Any? = nil) {
+        let key = NotificationSubscriberConstants.notificationPrefix + String(describing: type(of: event))
         let notificationName = NSNotification.Name(key)
         
-        let userInfo = [EventSubscriberConstants.dataKey: event]
+        let userInfo = [NotificationSubscriberConstants.dataKey: event]
         NotificationCenter.default.post(name: notificationName, object: object, userInfo: userInfo)
     }
 }
