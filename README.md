@@ -1,11 +1,11 @@
 # EventSubscriber
 
-Allows to create event types with strong structure of parameters.
+Allows to create notifications with strong structure of parameters.
 
 You can create event based on enums and structs, subscribe and handle it at different places of your application.
 
-Use ```Event``` protocol to deeclare an event type.
-Conform ```EventSubscriber``` protocol to allow object subscribe for events
+Use ```NotificationEvent``` protocol to deeclare an event type.
+Conform ```NotificationSubscriber``` protocol to allow object subscribe for events
 Pass event type into a ```subscribe()``` function block as parameter type to subscribe for specific event.
 Not forget to call ```unsubscribeAll()``` method on deinit.
 
