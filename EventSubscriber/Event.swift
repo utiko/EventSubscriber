@@ -12,14 +12,16 @@ public protocol Event {
 }
 
 public extension Event {
-    public func send() {
+    func send() {
         sendEvent(event: self)
     }
     
-    public func send(withObject object: Any) {
+    func send(withObject object: Any) {
         sendEvent(event: self, object: object)
     }
-    
+}
+
+private extension Event {
     private func sendEvent<T: Event>(event: T, object: Any? = nil) {
         let key = EventSubscriberConstants.notificationPrefix + String(describing: type(of: event))
         let notificationName = NSNotification.Name(key)

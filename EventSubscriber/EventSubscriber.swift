@@ -28,7 +28,7 @@ fileprivate struct TinySubscriptionAssociatedKeys {
 
 public extension EventSubscriber {
     
-    public var subscriptions: [String: EventSubscription]? {
+    var subscriptions: [String: EventSubscription]? {
         get {
             return objc_getAssociatedObject(self, &TinySubscriptionAssociatedKeys.subscriptions) as? [String: EventSubscription]
         }
@@ -37,13 +37,13 @@ public extension EventSubscriber {
         }
     }
     
-    public func subscribe<T: Event>(using: @escaping (_ event: T) -> Void) {
+    func subscribe<T: Event>(using: @escaping (_ event: T) -> Void) {
         subscribe { (event: T, _) in
             using(event)
         }
     }
     
-    public func subscribe<T: Event>(using: @escaping (_ event: T, _ object: Any?) -> Void) {
+    func subscribe<T: Event>(using: @escaping (_ event: T, _ object: Any?) -> Void) {
         let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
         let notificationName = NSNotification.Name(key)
 
@@ -59,24 +59,24 @@ public extension EventSubscriber {
         subscriptions?[key] = subscription
     }
     
-    private func removeSubscription(forKey key: String) {
-        if let subscriptions = subscriptions, let subscription = subscriptions[key] {
-            NotificationCenter.default.removeObserver(subscription)
-            self.subscriptions?[key] = nil
-        }
-    }
-    
-    public func unsubscribe<T: Event>(event: T.Type) {
+    func unsubscribe<T: Event>(event: T.Type) {
         let key = EventSubscriberConstants.notificationPrefix + String(describing: T.self)
         removeSubscription(forKey: key)
     }
     
-    public func unsubscribeAll() {
+    func unsubscribeAll() {
         guard let subscriptions = subscriptions else { return }
 
         for (_, subscription) in subscriptions {
             NotificationCenter.default.removeObserver(subscription)
         }
         self.subscriptions?.removeAll()
+    }
+    
+    private func removeSubscription(forKey key: String) {
+        if let subscriptions = subscriptions, let subscription = subscriptions[key] {
+            NotificationCenter.default.removeObserver(subscription)
+            self.subscriptions?[key] = nil
+        }
     }
 }

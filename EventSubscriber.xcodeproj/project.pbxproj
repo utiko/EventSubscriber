@@ -67,6 +67,7 @@
 			children = (
 				3D3CB26620C177690091D3DD /* EventSubscriber */,
 				3D3CB27120C177690091D3DD /* EventSubscriberTests */,
+				3D3CB26820C177690091D3DD /* EventSubscriber-Info.plist */,
 				3D6959932111CA0B00F34B35 /* PodSpec */,
 				3D3CB26520C177690091D3DD /* Products */,
 			);
@@ -87,7 +88,6 @@
 				3D3CB26720C177690091D3DD /* EventSubscriber.h */,
 				3D3CB27E20C177890091D3DD /* Event.swift */,
 				3D3CB27F20C177890091D3DD /* EventSubscriber.swift */,
-				3D3CB26820C177690091D3DD /* EventSubscriber-Info.plist */,
 			);
 			path = EventSubscriber;
 			sourceTree = "<group>";
@@ -381,7 +381,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "EventSubscriber/EventSubscriber-Info.plist";
+				INFOPLIST_FILE = "EventSubscriber-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -389,6 +389,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = net.utiko.EventSubscriber;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -409,7 +410,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "EventSubscriber/EventSubscriber-Info.plist";
+				INFOPLIST_FILE = "EventSubscriber-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -417,6 +418,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = net.utiko.EventSubscriber;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

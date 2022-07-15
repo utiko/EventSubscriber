@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EventSubscriber'
-  s.version          = '0.2'
+  s.version          = '0.3'
   s.summary          = 'A wrapper around NotificationCenter..'
 
 # This description is used to generate tags and improve search results.
@@ -36,7 +36,7 @@ Please look at EventSubscriberTests for more clear understanding.
   s.homepage = 'https://github.com/utiko/EventSubscriber'
   s.license = { :type => 'MIT', :file => 'LICENSE' }
   s.author = { 'uTiko' => 'tiko@utiko.net' }
-  s.source = { :git => 'https://github.com/utiko/EventSubscriber.git', :tag => '0.2' }
+  s.source = { :git => 'https://github.com/utiko/EventSubscriber.git', :tag => '0.3' }
   s.ios.deployment_target = '9.0'
   s.swift_version = '4.0'
   s.source_files = 'EventSubscriber/**/*'
